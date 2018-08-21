@@ -184,3 +184,7 @@ gulp.task( 'watch', function() {
 gulp.task( 'markup', browserSync.reload );
 gulp.task( 'scripts', [ 'uglify' ] );
 gulp.task( 'default', [ 'cssmin', 'scripts' ] );
+
+// gulp.task('push_dev', shell.task("rsync -av --exclude 'node_modules' ~/Websites/MGM/neglected-wp.local/wp-content/themes/neglected/. emptyhead.work:~/domains/neglected.emptyhead.work/html/wp-content/themes/neglected/. && wp migratedb profile 1") )
+// gulp.task('push_dev_theme', shell.task("rsync -av --exclude 'node_modules' ~/Websites/MGM/neglected-wp.local/wp-content/themes/neglected/. emptyhead.work:~/domains/neglected.emptyhead.work/html/wp-content/themes/neglected/."));
+// gulp.task('push_dev_db', shell.task('wp migratedb profile 1'));
