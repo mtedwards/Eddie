@@ -11,8 +11,6 @@
 
 ?>
 
-			</div><!-- #content -->
-		</div>
 	</div><?php // end content-wrap ?>
 	<div class="footer-wrap">
 		<div class="site">

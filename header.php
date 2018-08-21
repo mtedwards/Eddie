@@ -58,5 +58,3 @@
 		</div>
 	</div><?php // end header wrap ?>
 	<div class="content-wrap">
-		<div class="site">
-			<div id="content" class="site-content">

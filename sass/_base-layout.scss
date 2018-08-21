@@ -1,6 +1,35 @@
-
 .site {
-  max-width: 1010px;
+  max-width: $site-width;
   margin: 0 auto;
-  padding: 0 30px;
+  padding: 0 $padding;
+}
+
+.content-area {
+  margin: $margins auto;
+ @extend .grid-clearfix;
+  @include breakpoint($small) {
+    main {
+      width: 75%;
+      float: left;
+    }
+
+    aside {
+      width: 25%;
+      padding-left: 1em;
+      float: left;
+    }
+  }
+  @supports(display:grid) {
+    @include breakpoint($small) {
+      display:grid;
+      grid-template-columns: auto 18.75em;
+      grid-gap: 1em;
+      main, aside {
+        width: auto;
+      }
+    }
+  }
+  .entry-content {
+    @extend .clearfix;
+  }
 }
