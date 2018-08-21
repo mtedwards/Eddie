@@ -1,6 +1,20 @@
-// Make sure all elements use `box-sizing: border-box;` by default.
-* {
+/* Reset
+  =============== */
+
+// Reset box sizing to border box
+html {
 	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+// Remove figure margin
+figure {
+	margin: 0;
 }
 
 ul, ol, blockquote, p, h1, h2, h3, h4, h5, h6 {
@@ -15,5 +29,5 @@ ul, ol, blockquote, p, h1, h2, h3, h4, h5, h6 {
 
 img, a img {
 	max-width: 100%;
-	height: auto;
+	height: auto; 
 }

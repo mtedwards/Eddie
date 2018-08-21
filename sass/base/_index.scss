@@ -1,5 +1,12 @@
-@import "my-reset";
 
 @import "alignment";
 @import "elements";
 @import "media";
+
+
+// Components
+@import "scaffolding";
+@import "helpers";
+@import "buttons";
+@import "forms";
+@import "tables";

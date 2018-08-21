@@ -77,7 +77,7 @@ h5 {
 	font-size: $h5-mobile;
 }
 
-@include small-breakpoint {
+@include breakpoint($small) {
 	// Increased margin on additional headings
 	h1:not(:first-child),
 	h2:not(:first-child),
@@ -193,7 +193,7 @@ dd {
 	margin-bottom: .5rem;
 }
 
-// Full container 
+// Full container
 .full-container {
 	max-width: 100%;
 	padding: 0 1rem;
@@ -224,7 +224,7 @@ dd {
 	padding: $content-padding-mobile;
 }
 
-@include small-breakpoint {
+@include breakpoint($small) {
 	.content-section {
 		padding: $content-padding;
 	}

@@ -1,16 +1,32 @@
 /* Helpers
   =============== */
 
-// Classic clearfix 
-.clearfix::before,
-.clearfix::after {
-	content: " ";
-	display: block;
-}
+	// Classic clearfix
+	.clearfix::before,
+	.clearfix::after {
+		content: " ";
+		display: block;
+	}
 
-.clearfix:after {
-	clear: both;
-}
+	.clearfix:after {
+		clear: both;
+	}
+
+	.grid-clearfix::before,
+	.grid-clearfix::after {
+		content: " ";
+		display: block;
+		@supports(display:grid) {
+			content: none;
+		}
+	}
+
+	.grid-clearfix:after {
+		clear: both;
+		@supports(display:grid) {
+			clear:none;
+		}
+	}
 
 // Text alignment
 .text-left {
