@@ -12,6 +12,7 @@ const postcss         = require( 'gulp-postcss' );
 const reload          = browserSync.reload;
 const rename          = require( 'gulp-rename' );
 const sass            = require( 'gulp-sass' );
+const shell           = require( 'gulp-shell' );
 const sourcemaps      = require( 'gulp-sourcemaps' );
 const uglify          = require( 'gulp-uglify' );
 
@@ -55,7 +56,7 @@ gulp.task('sass', function(){
   return gulp.src('./sass/style.scss')
     .pipe(sourcemaps.init())
     .pipe(sass({
-      'includePaths': ['node_modules/breakpoint-sass/stylesheets'],
+      'includePaths': ['node_modules/breakpoint-sass/stylesheets', 'node_modules/@fancyapps/fancybox/dist/'],
 			'outputStyle': 'expanded' // Options: nested, expanded, compact, compressed
     }).on('error', sass.logError))
     .pipe(postcss(plugins))
@@ -76,7 +77,7 @@ gulp.task('cssmin', function(){
   return gulp.src('./sass/style.scss')
     .pipe(sourcemaps.init())
     .pipe(sass({
-      'includePaths': ['node_modules/breakpoint-sass/stylesheets'],
+      'includePaths': ['node_modules/breakpoint-sass/stylesheets', 'node_modules/@fancyapps/fancybox/dist/'],
 			'outputStyle': 'expanded' // Options: nested, expanded, compact, compressed
     }).on('error', sass.logError))
     .pipe(postcss(p1_plugins))
