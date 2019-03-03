@@ -42,9 +42,11 @@
 					</a>
 				</p>
 			<?php } ?>
-
+			<a id="navToggle" class="nav-toggle" aria-hidden="true">
+				Menu
+				<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="arcs"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+			</a>
 		</div><!-- .site-branding -->
-
 
 		<nav id="site-navigation" class="main-navigation nav-collapse" role="navigation">
 

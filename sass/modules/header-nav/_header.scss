@@ -1,12 +1,21 @@
 header.site-header {
-  margin-bottom: 1em;
+  padding: 2em 1rem;
+
+  @include breakpoint($large) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 .site-branding {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   .site-title {
-    margin-top: 1.5rem;
-    margin-bottom: 0;
+
+    margin:0;
   }
   p.site-title {
     font-size: $h1-mobile;
@@ -16,11 +25,5 @@ header.site-header {
       font-size: $h1;
       font-weight: $heading-font-weight;
     }
-  }
-}
-
-p.site-description {
-  @include breakpoint($small) {
-    margin-bottom: 0;
   }
 }

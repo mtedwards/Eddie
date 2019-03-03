@@ -31,6 +31,7 @@ const jsFiles = [
   {
     filename: 'production',
     files: [
+      'js/responsive-nav.js',
       'node_modules/@fancyapps/fancybox/dist/jquery.fancybox.js',
       'js/app.js'
     ]
