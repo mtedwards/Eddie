@@ -14,18 +14,21 @@
 
 get_header(); ?>
 
-	<div id="primary" class="content-area container">
-		<main id="main" class="site-main">
+<section id="primary" class="content-area-wrap container">
 
+	<?php
+	if ( have_posts() ) :
+
+		if ( is_home() && ! is_front_page() ) : ?>
+			<header class="entry-header">
+				<h1 class="entry-title"><?php single_post_title(); ?></h1>
+			</header>
 		<?php
-		if ( have_posts() ) :
+	endif;  ?>
 
-			if ( is_home() && ! is_front_page() ) : ?>
-				<header>
-					<h1 class="page-title"><?php single_post_title(); ?></h1>
-				</header>
-			<?php
-		endif;  ?>
+	<main id="main" class="content-area">
+		<section id="post-<?php the_ID(); ?>" <?php post_class('entry-content'); ?>>
+
 		<div class="excerpt-wrap">
 			<?php
 					/* Start the Loop */
@@ -47,9 +50,13 @@ get_header(); ?>
 
 				endif; ?>
 			</div>
+		</section>
+
+			<?php get_sidebar(); ?>
 		</main><!-- #main -->
-	</div><!-- #primary -->
+
+</section>
 
 <?php
-// get_sidebar();
-get_footer();
+
+ get_footer();

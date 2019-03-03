@@ -2,7 +2,7 @@
 
 // site nameUrl
 
-const siteName = 'xxxx';
+const siteName = 'eddie';
 
 
 const autoprefixer    = require( 'autoprefixer' );
@@ -97,7 +97,7 @@ gulp.task('cssmin', function(){
   return gulp.src('./sass/style.scss')
     .pipe(sourcemaps.init())
     .pipe(sass({
-      'includePaths': ['node_modules/breakpoint-sass/stylesheets', 'node_modules/susy/sass/susy'],
+      'includePaths': ['node_modules/breakpoint-sass/stylesheets'],
 			'outputStyle': 'expanded' // Options: nested, expanded, compact, compressed
     }).on('error', sass.logError))
     .pipe(postcss(p1_plugins))

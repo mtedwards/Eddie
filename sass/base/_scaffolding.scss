@@ -193,31 +193,7 @@ dd {
 	margin-bottom: .5rem;
 }
 
-// Full container
-.full-container {
-	max-width: 100%;
-	padding: 0 1rem;
-}
 
-// Container
-.container {
-	max-width: $site-width;
-	padding: 0 $padding;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-// Small container
-.small-container {
-	@extend .container;
-	max-width: $small;
-}
-
-// Medium container
-.medium-container {
-	@extend .container;
-	max-width: $medium;
-}
 
 // Content
 .content-section {
@@ -228,4 +204,13 @@ dd {
 	.content-section {
 		padding: $content-padding;
 	}
+}
+
+// Screen reader text for accessibility
+.screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
 }

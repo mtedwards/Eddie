@@ -1,35 +1,58 @@
-.site {
-  max-width: $site-width;
-  margin: 0 auto;
-  padding: 0 $padding;
+
+
+// Container
+.container {
+	max-width: $site-width;
+	padding: 0 $padding;
+	margin-left: auto;
+	margin-right: auto;
 }
 
-.content-area {
-  margin: $margins auto;
- @extend .grid-clearfix;
-  @include breakpoint($small) {
-    main {
-      width: 75%;
-      float: left;
-    }
+// Small container
+.small-container {
+	@extend .container;
+	max-width: $small;
+}
 
-    aside {
-      width: 25%;
-      padding-left: 1em;
-      float: left;
-    }
+// Medium container
+.medium-container {
+	@extend .container;
+	max-width: $medium;
+}
+
+// Full container
+.full-container {
+	max-width: 100%;
+	padding: 0 1rem;
+}
+
+
+// Main Layout
+.content-area {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -1rem;
+  margin-right: -1rem;
+
+  section, aside {
+    margin: 1rem;
   }
-  @supports(display:grid) {
-    @include breakpoint($small) {
-      display:grid;
-      grid-template-columns: auto 18.75em;
-      grid-gap: 1em;
-      main, aside {
-        width: auto;
-      }
-    }
+
+  section {
+    min-width: 60%;
+    flex-basis: 0;
+    flex-grow: 666;
   }
-  .entry-content {
-    @extend .clearfix;
+
+  aside {
+    flex-basis: 20rem;
+    flex-grow: 1;
+  }
+}
+
+
+.content-area aside {
+  > h4 {
+    margin-top: 0;
   }
 }
