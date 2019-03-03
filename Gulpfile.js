@@ -1,5 +1,10 @@
 'use strict';
 
+// site nameUrl
+
+const siteName = 'xxxx';
+
+
 const autoprefixer    = require( 'autoprefixer' );
 const babel           = require( 'gulp-babel' );
 const browserSync     = require( 'browser-sync' );
@@ -12,8 +17,25 @@ const postcss         = require( 'gulp-postcss' );
 const reload          = browserSync.reload;
 const rename          = require( 'gulp-rename' );
 const sass            = require( 'gulp-sass' );
+const shell           = require( 'gulp-shell' );
 const sourcemaps      = require( 'gulp-sourcemaps' );
 const uglify          = require( 'gulp-uglify' );
+
+
+const betterRollup = require('gulp-better-rollup')
+const rollUpBabel = require('rollup-plugin-babel')
+const rollUpCommonjs = require('rollup-plugin-commonjs')
+const rollUpNodeResolve = require('rollup-plugin-node-resolve')
+
+const jsFiles = [
+  {
+    filename: 'production',
+    files: [
+      'node_modules/@fancyapps/fancybox/dist/jquery.fancybox.js',
+      'js/app.js'
+    ]
+  }
+]
 
 // Set Asset Paths
 
@@ -22,22 +44,21 @@ const paths = {
   'build': 'build',
   'php': [ './*.php', './**/*.php'],
   'sass': 'sass/**/*.scss',
-  'scripts': 'js/*.js'
+  'scripts': [ './js/*.js', './js/**/*.js']
 }
 
 /**
  * Handle errors and alert the user.
  */
-function handleErrors() {
+function handleErrors(error) {
 	const args = Array.prototype.slice.call( arguments );
+  let errorMsg = '\n'+error.message + '\n\n'+ error.frame;
 
 	notify.onError( {
-		'title': 'Task Failed [<%= error.message %>',
-		'message': 'See console.',
-		'sound': 'Sosumi' // See: https://github.com/mikaelbr/node-notifier#all-notification-options-with-their-defaults
+		'title': 'Task Failed',
+		'message': errorMsg,
+		'sound': 'Tink' // See: https://github.com/mikaelbr/node-notifier#all-notification-options-with-their-defaults
 	} ).apply( this, args );
-
-	gutil.beep(); // Beep 'sosumi' again.
 
 	// Prevent the 'watch' task from stopping.
 	this.emit( 'end' );
@@ -76,7 +97,7 @@ gulp.task('cssmin', function(){
   return gulp.src('./sass/style.scss')
     .pipe(sourcemaps.init())
     .pipe(sass({
-      'includePaths': ['node_modules/breakpoint-sass/stylesheets'],
+      'includePaths': ['node_modules/breakpoint-sass/stylesheets', 'node_modules/susy/sass/susy'],
 			'outputStyle': 'expanded' // Options: nested, expanded, compact, compressed
     }).on('error', sass.logError))
     .pipe(postcss(p1_plugins))
@@ -91,6 +112,30 @@ gulp.task('cssmin', function(){
 });
 
 
+gulp.task('logincss', function(){
+  var p1_plugins = [
+        autoprefixer()
+    ];
+  var p2_plugins = [
+        cssnano()
+    ];
+
+  return gulp.src('./sass/login/login-styles.scss')
+    .pipe(sourcemaps.init())
+    .pipe(sass({
+			'outputStyle': 'expanded' // Options: nested, expanded, compact, compressed
+    }).on('error', sass.logError))
+    .pipe(postcss(p1_plugins))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('./build/'))
+    .pipe( browserSync.stream() )
+    .pipe(notify({message: 'Sass done'}))
+    .pipe(postcss(p2_plugins))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest('./build/'))
+    .pipe(notify({message: 'CSS Min done'}));
+});
+
 
 /**
  * Concatenate and transform JavaScript.
@@ -100,34 +145,46 @@ gulp.task('cssmin', function(){
  * https://www.npmjs.com/package/gulp-sourcemaps
  */
 gulp.task( 'concat', () =>
-    gulp.src([
-      'node_modules/@fancyapps/fancybox/dist/jquery.fancybox.js',
-      'js/responsive-nav.js',
-      'js/app.js'
-    ])
 
-		// Deal with errors.
-		.pipe( plumber(
-			{'errorHandler': handleErrors}
-		) )
+    jsFiles.map( function( entry ){
+      gulp.src(entry.files)
+  		// Deal with errors.
+  		.pipe( plumber(
+  			{'errorHandler': handleErrors}
+  		) )
 
-		// Start a sourcemap.
-		.pipe( sourcemaps.init() )
+  		// Start a sourcemap.
+  		.pipe( sourcemaps.init() )
 
-		// Convert ES6+ to ES2015.
-		.pipe( babel( {
-			'presets': [ 'env']
-		} ) )
+      .pipe(betterRollup({
+        plugins: [
+          rollUpNodeResolve({
+            module: true,
+            jsnext: true,
+            main: true,
+            browser: true,
+            extensions: ['.js'],
+            preferBuiltins: true,
+          }),
+          rollUpCommonjs(),
+          rollUpBabel(),
+        ],
+      }, {
+        format: 'iife',
+      }))
 
-		// Concatenate partials into a single script.
-		.pipe( concat( 'production.js' ) )
+  		// Concatenate partials into a single script.
+  		.pipe( concat( entry.filename + '.js' ) )
 
-		// Append the sourcemap to project.js.
-		.pipe( sourcemaps.write() )
+  		// Append the sourcemap to project.js.
+  		.pipe( sourcemaps.write() )
 
-		// Save project.js
-		.pipe( gulp.dest( './build' ) )
-		.pipe( browserSync.stream() )
+  		// Save project.js
+  		.pipe( gulp.dest( './build' ) )
+      .pipe( rename( {'suffix': '.min'} ) )
+
+  		.pipe( browserSync.stream() )
+    })
 );
 
 /**
@@ -137,7 +194,7 @@ gulp.task( 'concat', () =>
   */
 gulp.task( 'uglify', [ 'concat' ], () =>
     gulp.src([
-      'build/production.js'
+      'build/*.js'
     ])
 		.pipe( plumber( {'errorHandler': handleErrors} ) )
 		.pipe( rename( {'suffix': '.min'} ) )
@@ -149,11 +206,8 @@ gulp.task( 'uglify', [ 'concat' ], () =>
 		.pipe( uglify( {
 			'mangle': false
 		} ) )
-		.pipe( gulp.dest( 'build' ) )
+		.pipe( gulp.dest( './build/min' ) )
 );
-
-
-
 
 
 /**
@@ -167,7 +221,7 @@ gulp.task( 'watch', function() {
 	browserSync( {
 		'open': true,             // Open project in a new tab?
 		'injectChanges': true,     // Auto inject changes instead of full reload.
-		'proxy': 'eddie.local',         // Use the local dev sute
+		'proxy': siteName+'.local',         // Use the local dev sute
 		'watchOptions': {
 			'debounceDelay': 1000  // Wait 1 second before injecting.
 		}
@@ -175,7 +229,7 @@ gulp.task( 'watch', function() {
 
 	// Run tasks when files change.
 
-	gulp.watch( paths.sass, [ 'sass', 'cssmin' ] );
+	gulp.watch( paths.sass, [ 'sass', 'cssmin', 'logincss' ] );
 	gulp.watch( paths.scripts, [ 'scripts' ] );
 	gulp.watch( paths.php, browserSync.reload );
 
@@ -185,6 +239,7 @@ gulp.task( 'markup', browserSync.reload );
 gulp.task( 'scripts', [ 'uglify' ] );
 gulp.task( 'default', [ 'cssmin', 'scripts' ] );
 
-// gulp.task('push_dev', shell.task("rsync -av --exclude 'node_modules' ~/Websites/MGM/neglected-wp.local/wp-content/themes/neglected/. emptyhead.work:~/domains/neglected.emptyhead.work/html/wp-content/themes/neglected/. && wp migratedb profile 1") )
-// gulp.task('push_dev_theme', shell.task("rsync -av --exclude 'node_modules' ~/Websites/MGM/neglected-wp.local/wp-content/themes/neglected/. emptyhead.work:~/domains/neglected.emptyhead.work/html/wp-content/themes/neglected/."));
-// gulp.task('push_dev_db', shell.task('wp migratedb profile 1'));
+gulp.task('push_dev', shell.task("rsync -av --exclude 'node_modules' ~/Websites/"+siteName+".local/wp-content/themes/"+siteName+"/. emptyhead.work:~/domains/"+siteName+".emptyhead.work/html/wp-content/themes/"+siteName+"/. && wp migratedb profile 1") )
+gulp.task('push_dev_theme', shell.task("rsync -av --exclude 'node_modules' ~/Websites/"+siteName+".local/wp-content/themes/"+siteName+"/. emptyhead.work:~/domains/"+siteName+".emptyhead.work/html/wp-content/themes/"+siteName+"/."));
+gulp.task('push_dev_plugins', shell.task("rsync -av ~/Websites/"+siteName+".local/wp-content/plugins/. emptyhead.work:~/domains/"+siteName+".emptyhead.work/html/wp-content/plugins/."));
+gulp.task('push_dev_db', shell.task('wp migratedb profile 1'));
