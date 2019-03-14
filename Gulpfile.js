@@ -70,7 +70,7 @@ function handleErrors(error) {
  * Handle changes to SCSS and ouput an expanded CSS file - for debugging
 **/
 
-gulp.task('sass', function(){
+gulp.task('sass', function(done){
   var plugins = [
         autoprefixer()
     ];
@@ -84,10 +84,11 @@ gulp.task('sass', function(){
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./build/'))
     .pipe( browserSync.stream() )
-    .pipe(notify({message: 'Sass done'}));
+    .pipe(notify({message: 'Sass done'})),
+    done();
 });
 
-gulp.task('cssmin', function(){
+gulp.task('cssmin', function(done){
   var p1_plugins = [
         autoprefixer()
     ];
@@ -109,33 +110,35 @@ gulp.task('cssmin', function(){
     .pipe(postcss(p2_plugins))
     .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest('./build/'))
-    .pipe(notify({message: 'CSS Min done'}));
+    .pipe(notify({message: 'CSS Min done'})),
+    done();
 });
 
 
-gulp.task('logincss', function(){
-  var p1_plugins = [
-        autoprefixer()
-    ];
-  var p2_plugins = [
-        cssnano()
-    ];
-
-  return gulp.src('./sass/login/login-styles.scss')
-    .pipe(sourcemaps.init())
-    .pipe(sass({
-			'outputStyle': 'expanded' // Options: nested, expanded, compact, compressed
-    }).on('error', sass.logError))
-    .pipe(postcss(p1_plugins))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./build/'))
-    .pipe( browserSync.stream() )
-    .pipe(notify({message: 'Sass done'}))
-    .pipe(postcss(p2_plugins))
-    .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest('./build/'))
-    .pipe(notify({message: 'CSS Min done'}));
-});
+// gulp.task('logincss', function(done){
+//   var p1_plugins = [
+//         autoprefixer()
+//     ];
+//   var p2_plugins = [
+//         cssnano()
+//     ];
+//
+//   return gulp.src('./sass/login/login-styles.scss')
+//     .pipe(sourcemaps.init())
+//     .pipe(sass({
+// 			'outputStyle': 'expanded' // Options: nested, expanded, compact, compressed
+//     }).on('error', sass.logError))
+//     .pipe(postcss(p1_plugins))
+//     .pipe(sourcemaps.write())
+//     .pipe(gulp.dest('./build/'))
+//     .pipe( browserSync.stream() )
+//     .pipe(notify({message: 'Sass done'}))
+//     .pipe(postcss(p2_plugins))
+//     .pipe(rename({suffix: '.min'}))
+//     .pipe(gulp.dest('./build/'))
+//     .pipe(notify({message: 'CSS Min done'})),
+//     done();
+// });
 
 
 /**
@@ -145,7 +148,7 @@ gulp.task('logincss', function(){
  * https://github.com/babel/gulp-babel
  * https://www.npmjs.com/package/gulp-sourcemaps
  */
-gulp.task( 'concat', () =>
+gulp.task( 'concat', function(done) {
 
     jsFiles.map( function( entry ){
       gulp.src(entry.files)
@@ -185,15 +188,17 @@ gulp.task( 'concat', () =>
       .pipe( rename( {'suffix': '.min'} ) )
 
   		.pipe( browserSync.stream() )
-    })
-);
+
+    }),
+    done()
+  });
 
 /**
   * Minify compiled JavaScript.
   *
   * https://www.npmjs.com/package/gulp-uglify
   */
-gulp.task( 'uglify', [ 'concat' ], () =>
+gulp.task( 'uglify', gulp.series('concat', function(done) {
     gulp.src([
       'build/*.js'
     ])
@@ -201,14 +206,15 @@ gulp.task( 'uglify', [ 'concat' ], () =>
 		.pipe( rename( {'suffix': '.min'} ) )
 		.pipe( babel( {
 			'presets': [
-				[ 'env']
+				['@babel/preset-env']
 			]
 		} ) )
 		.pipe( uglify( {
 			'mangle': false
 		} ) )
-		.pipe( gulp.dest( './build/min' ) )
-);
+    .pipe( gulp.dest( './build/min' ) ),
+    done()
+}));
 
 
 /**
@@ -216,29 +222,36 @@ gulp.task( 'uglify', [ 'concat' ], () =>
  *
  * https://www.npmjs.com/package/browser-sync
  */
-gulp.task( 'watch', function() {
+ // BrowserSync
+ function browserSyncRun(done) {
+   browserSync.init({
+     open: true,             // Open project in a new tab?
+ 		injectChanges: true,     // Auto inject changes instead of full reload.
+ 		proxy: siteName+'.local',         // Use the local dev sute
+ 		watchOptions: {
+ 			debounceDelay: 300  // Wait 1/2 second before injecting.
+ 		}
+   }),
+   done();
+ }
 
-	// Kick off BrowserSync.
-	browserSync( {
-		'open': true,             // Open project in a new tab?
-		'injectChanges': true,     // Auto inject changes instead of full reload.
-		'proxy': siteName+'.local',         // Use the local dev sute
-		'watchOptions': {
-			'debounceDelay': 1000  // Wait 1 second before injecting.
-		}
-	} );
+ // BrowserSync Reload
+ function browserSyncReload(done) {
+   browserSync.reload();
+   done();
+ }
 
-	// Run tasks when files change.
+ function watchFiles(done) {
+   gulp.watch( paths.sass, gulp.series('sass', 'cssmin'));
+   gulp.watch( paths.scripts, gulp.series('scripts') );
+   gulp.watch( paths.php, gulp.series(browserSyncReload) );
+   done();
+ }
 
-	gulp.watch( paths.sass, [ 'sass', 'cssmin', 'logincss' ] );
-	gulp.watch( paths.scripts, [ 'scripts' ] );
-	gulp.watch( paths.php, browserSync.reload );
-
-});
-
-gulp.task( 'markup', browserSync.reload );
-gulp.task( 'scripts', [ 'uglify' ] );
-gulp.task( 'default', [ 'cssmin', 'scripts' ] );
+ gulp.task( 'markup', browserSync.reload );
+ gulp.task( 'scripts', gulp.series('uglify') );
+ gulp.task( 'default', gulp.series('cssmin', 'scripts') );
+ gulp.task( 'watch', gulp.series(browserSyncRun, watchFiles ) );
 
 gulp.task('push_dev', shell.task("rsync -av --exclude 'node_modules' ~/Websites/"+siteName+".local/wp-content/themes/"+siteName+"/. emptyhead.work:~/domains/"+siteName+".emptyhead.work/html/wp-content/themes/"+siteName+"/. && wp migratedb profile 1") )
 gulp.task('push_dev_theme', shell.task("rsync -av --exclude 'node_modules' ~/Websites/"+siteName+".local/wp-content/themes/"+siteName+"/. emptyhead.work:~/domains/"+siteName+".emptyhead.work/html/wp-content/themes/"+siteName+"/."));
