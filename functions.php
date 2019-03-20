@@ -127,6 +127,15 @@ function _eddie_scripts() {
 add_action( 'wp_enqueue_scripts', '_eddie_scripts' );
 
 /**
+ * Add ACF Options page
+ */
+if( function_exists('acf_add_options_page') ) {
+
+	acf_add_options_page();
+
+}
+
+/**
  * Implement the Custom Header feature.
  */
 require get_template_directory() . '/inc/custom-header.php';
