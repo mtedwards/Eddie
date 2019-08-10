@@ -17,17 +17,6 @@ if ( ! function_exists( '_eddie_setup' ) ) :
 	 */
 	function _eddie_setup() {
 		/*
-		 * Make theme available for translation.
-		 * Translations can be filed in the /languages/ directory.
-		 * If you're building a theme based on _eddie, use a find and replace
-		 * to change '_eddie' to the name of your theme in all the template files.
-		 */
-		load_theme_textdomain( '_eddie', get_template_directory() . '/languages' );
-
-		// Add default posts and comments RSS feed links to head.
-		add_theme_support( 'automatic-feed-links' );
-
-		/*
 		 * Let WordPress manage the document title.
 		 * By adding theme support, we declare that this theme does not use a
 		 * hard-coded <title> tag in the document head, and expect WordPress to
@@ -57,8 +46,6 @@ if ( ! function_exists( '_eddie_setup' ) ) :
 		 */
 		add_theme_support( 'html5', array(
 			'search-form',
-			'comment-form',
-			'comment-list',
 			'gallery',
 			'caption',
 		) );
@@ -116,28 +103,15 @@ add_action( 'wp_enqueue_scripts', '_eddie_scripts' );
  */
 if( function_exists('acf_add_options_page') ) {
 
-	acf_add_options_page();
+	acf_add_options_page('Theme Options');
 
 }
 
-/**
- * Load Extras file
- */
-
+/* Load Extras file*/
 require get_template_directory() . '/inc/extras.php';
 
-
-/**
- * Completely Disable Comments
- */
-
+/* Completely Disable Comments */
 require get_template_directory() . '/inc/disable-comments.php';
 
-
-/**
- * Load Hooks file
- */
-
+/* Load Hooks file */
 require get_template_directory() . '/inc/hooks.php';
-
-require get_template_directory() . '/inc/video-functions.php';

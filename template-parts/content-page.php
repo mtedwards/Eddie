@@ -16,20 +16,9 @@
 <main id="main" class="content-area">
 	<section id="post-<?php the_ID(); ?>" <?php post_class('entry-content '); ?>>
 
-			<?php
-				the_content();
-
-				if(is_page_template ( 'gallery-page.php' )) {
-					get_template_part( 'template-parts/modules/image', 'gallery' );
-				}
-
-				if(is_page_template ( 'video-gallery-page.php' )) {
-					get_template_part( 'template-parts/modules/video', 'gallery' );
-				}
-			?>
+			<?php the_content(); ?>
 
 	</section><!-- #post-<?php the_ID(); ?> -->
 
 	<?php //  get_sidebar(); ?>
-
 </main><!-- #main -->
