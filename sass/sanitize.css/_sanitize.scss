@@ -11,7 +11,6 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-size: 1rem;
   font-family:
     system-ui,
     /* macOS 10.11-10.12 */ -apple-system,
@@ -27,7 +26,9 @@
     /* Linux emoji */ "Noto Color Emoji";
 }
 
-
+html {
+  font-size: 1rem;
+}
 
 /**
  * 1. Add text decoration inheritance in all browsers (opinionated).
