@@ -125,9 +125,9 @@ function _eddie_get_placeholder_image( $args = array() ) {
  */
 function _eddie_get_placeholder_unsplash( $args = array() ) {
 	$default_args = array(
-		'width'    => '',
-		'height'   => '',
-		'category' => '',
+		'width'    => '400',
+		'height'   => '400',
+		'category' => 'people',
 		'keywords' => '',
 	);
 	$args = wp_parse_args( $args, $default_args );

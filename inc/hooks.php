@@ -35,11 +35,6 @@ function _eddie_body_classes( $classes ) {
 		$classes[] = 'hfeed';
 	}
 
-	// Adds a class of group-blog to blogs with more than 1 published author.
-	if ( is_multi_author() ) {
-		$classes[] = 'group-blog';
-	}
-
 	// Are we on mobile?
 	// PHP CS wants us to use jetpack_is_mobile instead, but what if we don't have Jetpack installed?
 	// Allows for using wp_is_mobile without throwing an error.
@@ -64,6 +59,7 @@ function _eddie_body_classes( $classes ) {
 
 	return $classes;
 }
+
 add_filter( 'body_class', '_eddie_body_classes' );
 
 /**

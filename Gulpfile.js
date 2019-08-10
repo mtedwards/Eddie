@@ -31,8 +31,6 @@ const jsFiles = [
   {
     filename: 'production',
     files: [
-      'js/responsive-nav.js',
-      'node_modules/@fancyapps/fancybox/dist/jquery.fancybox.js',
       'js/app.js'
     ]
   }
@@ -77,7 +75,7 @@ gulp.task('sass', function(done){
   return gulp.src('./sass/style.scss')
     .pipe(sourcemaps.init())
     .pipe(sass({
-      'includePaths': ['node_modules/breakpoint-sass/stylesheets'],
+      'includePaths': [],
 			'outputStyle': 'expanded' // Options: nested, expanded, compact, compressed
     }).on('error', sass.logError))
     .pipe(postcss(plugins))
@@ -99,7 +97,7 @@ gulp.task('cssmin', function(done){
   return gulp.src('./sass/style.scss')
     .pipe(sourcemaps.init())
     .pipe(sass({
-      'includePaths': ['node_modules/breakpoint-sass/stylesheets'],
+      'includePaths': [],
 			'outputStyle': 'expanded' // Options: nested, expanded, compact, compressed
     }).on('error', sass.logError))
     .pipe(postcss(p1_plugins))

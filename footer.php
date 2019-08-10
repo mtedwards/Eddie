@@ -11,10 +11,8 @@
 
 ?>
 
-	<footer id="colophon" class="site-footer container">
-		<div class="site-info">
-				All rights reserved &copy; <?php echo date('Y'); ?>
-		</div><!-- .site-info -->
+	<footer id="colophon" class="">
+		All rights reserved &copy; <?php echo date('Y'); ?>
 	</footer><!-- #colophon -->
 
 <?php wp_footer(); ?>
