@@ -14,14 +14,16 @@
 
 get_header(); ?>
 
-<section id="primary" class="content-area-wrap container">
+<section id="primary" class="">
 
 	<?php
 	if ( have_posts() ) :
 
 		if ( is_home() && ! is_front_page() ) : ?>
 			<header class="entry-header">
-				<h1 class="entry-title"><?php single_post_title(); ?></h1>
+				<h1 class="entry-title">
+					<?php single_post_title(); ?>
+				</h1>
 			</header>
 		<?php
 	endif;  ?>
@@ -52,7 +54,7 @@ get_header(); ?>
 			</div>
 		</section>
 
-			<?php get_sidebar(); ?>
+			<?php // get_sidebar(); ?>
 		</main><!-- #main -->
 
 </section>
