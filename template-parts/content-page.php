@@ -14,7 +14,7 @@
 </header><!-- .entry-header -->
 
 <main id="main" class="content-area">
-	<section id="post-<?php the_ID(); ?>" <?php post_class('entry-content '); ?>>
+	<section id="post-<?php the_ID(); ?>" <?php post_class('entry-content stack'); ?>>
 
 			<?php the_content(); ?>
 

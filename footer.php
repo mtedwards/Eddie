@@ -11,8 +11,8 @@
 
 ?>
 
-	<footer id="colophon" class="">
-		All rights reserved &copy; <?php echo date('Y'); ?>
+	<footer id="colophon" class="stack">
+		<p>All rights reserved &copy; <?php echo date('Y'); ?></p>
 	</footer><!-- #colophon -->
 
 <?php wp_footer(); ?>

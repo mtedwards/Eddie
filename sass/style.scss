@@ -2,6 +2,17 @@
 
 _eddie is based on Underscores http://underscores.me/, (C) 2012-2016 Automattic, Inc.
 Underscores is distributed under the terms of the GNU GPL v2 or later.
-
-
 */
+
+// sanitize.css is a CSS library that provides consistent, cross-browser default styling of HTML elements alongside useful defaults.
+@import 'sanitize.css/index';
+
+// Global styles and variables the main overall setup
+@import 'globals';
+
+// Some CSS for default WordPress functionality like image alignment etc
+@import 'wp-helpers';
+
+// Helper classes
+// Need to apply a style? Think it might be used elsewhere in the there? Add it to wp-helpers
+@import 'helpers';

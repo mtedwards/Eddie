@@ -1,0 +1,64 @@
+
+// Colors
+$bg_color: #fff;
+$text_color: #222;
+
+$feature_color: #E90A02;
+
+// Breakpoints
+$medium: 45em;
+
+$typoBreak: 45em;
+
+
+// typography
+$ratio: 1.33;
+
+$s0: 1rem;
+$s1: $s0 * $ratio;
+$s2: $s1 * $ratio;
+$s3: $s2 * $ratio;
+$s4: $s3 * $ratio;
+$s5: $s4 * $ratio;
+
+$s-1: $s0 / $ratio;
+$s-2: $s-1 / $ratio;
+$s-3: $s-2 / $ratio;
+$s-4: $s-3 / $ratio;
+$s-5: $s-4 / $ratio;
+
+h1, .h1 {
+  font-size: $s3;
+  @media screen and (min-width:$typoBreak) {
+    font-size: $s4;
+  }
+}
+
+h2, .h2 {
+  font-size: $s2;
+  @media screen and (min-width:$typoBreak) {
+    font-size: $s3;
+  }
+}
+
+h3, .h3 {
+  font-size: $s1;
+  @media screen and (min-width:$typoBreak) {
+    font-size: $s2;
+  }
+}
+
+h4, .h4 {
+  font-size: $s0;
+  @media screen and (min-width:$typoBreak) {
+    font-size: $s1;
+  }
+}
+
+h5, .h5 {
+  font-size: $s0;
+}
+
+h6, .h6  {
+  font-size: $s0;
+}
